@@ -1,0 +1,317 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CareerTrack Pro is a polished local-first career application tracker and interview dashboard.">
+  <title>CareerTrack Pro</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Persistent shell: sidebar navigation plus a single-page dashboard workspace. -->
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="#dashboard" data-view-link="dashboard" aria-label="CareerTrack Pro dashboard">
+        <img src="assets/logo.svg" alt="" width="44" height="44">
+        <span>
+          <strong>CareerTrack Pro</strong>
+          <small>Application command center</small>
+        </span>
+      </a>
+
+      <nav class="nav-list" aria-label="Workspace sections">
+        <button class="nav-item is-active" type="button" data-view-link="dashboard">
+          <span class="nav-icon">01</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="applications">
+          <span class="nav-icon">02</span>
+          <span>Applications</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="kanban">
+          <span class="nav-icon">03</span>
+          <span>Pipeline</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="companies">
+          <span class="nav-icon">04</span>
+          <span>Companies</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="interviews">
+          <span class="nav-icon">05</span>
+          <span>Interviews</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="calendar">
+          <span class="nav-icon">06</span>
+          <span>Calendar</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="analytics">
+          <span class="nav-icon">07</span>
+          <span>Analytics</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="resumes">
+          <span class="nav-icon">08</span>
+          <span>Resumes</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="skills">
+          <span class="nav-icon">09</span>
+          <span>Skill Gaps</span>
+        </button>
+        <button class="nav-item" type="button" data-view-link="notes">
+          <span class="nav-icon">10</span>
+          <span>Notes</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="button button-ghost button-full" type="button" data-action="open-application-modal">New Application</button>
+        <button class="button button-muted button-full" type="button" id="themeToggle" aria-pressed="false">Dark Mode</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Topbar controls stay available across every workspace view. -->
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local-first workspace</p>
+          <h1 id="viewTitle">Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <label class="search-field" for="globalSearch">
+            <span>Search</span>
+            <input id="globalSearch" type="search" placeholder="Search roles, companies, notes..." autocomplete="off">
+          </label>
+          <button class="button button-muted" type="button" id="exportCsvBtn">Export CSV</button>
+          <button class="button button-muted" type="button" id="pdfReportBtn">PDF Report</button>
+          <button class="button button-primary" type="button" data-action="open-application-modal">Add Application</button>
+        </div>
+      </header>
+
+      <!-- Dashboard overview with live cards and operational summaries. -->
+      <section class="view is-active" id="dashboard" data-view="dashboard" aria-labelledby="dashboardTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Snapshot</p>
+            <h2 id="dashboardTitle">Career pipeline overview</h2>
+          </div>
+          <div class="inline-actions">
+            <button class="button button-muted" type="button" data-action="open-interview-modal">Schedule Interview</button>
+            <button class="button button-muted" type="button" data-view-link="analytics">View Analytics</button>
+          </div>
+        </div>
+
+        <div class="stat-grid" id="statsGrid" aria-live="polite"></div>
+
+        <div class="dashboard-grid">
+          <article class="panel panel-large">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Pipeline</p>
+                <h3>Stage health</h3>
+              </div>
+              <button class="text-button" type="button" data-view-link="kanban">Open board</button>
+            </div>
+            <div class="mini-kanban" id="dashboardPipeline"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Upcoming</p>
+                <h3>Interviews</h3>
+              </div>
+              <button class="text-button" type="button" data-view-link="interviews">Manage</button>
+            </div>
+            <div class="stack-list" id="upcomingInterviews"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Focus</p>
+                <h3>Next follow-ups</h3>
+              </div>
+            </div>
+            <div class="stack-list" id="followUpList"></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CRUD table for the application tracker. -->
+      <section class="view" id="applications" data-view="applications" aria-labelledby="applicationsTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Applications</p>
+            <h2 id="applicationsTitle">Tracked opportunities</h2>
+          </div>
+          <div class="filter-row">
+            <select id="statusFilter" aria-label="Filter by status"></select>
+            <select id="companyFilter" aria-label="Filter by company"></select>
+            <button class="button button-primary" type="button" data-action="open-application-modal">Add Application</button>
+          </div>
+        </div>
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Company</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Applied</th>
+                <th>Next Step</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Drag-and-drop stage board for application pipeline management. -->
+      <section class="view" id="kanban" data-view="kanban" aria-labelledby="kanbanTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Pipeline</p>
+            <h2 id="kanbanTitle">Kanban board</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-application-modal">Add Card</button>
+        </div>
+        <div class="kanban-board" id="kanbanBoard" aria-live="polite"></div>
+      </section>
+
+      <!-- Company relationship tracker. -->
+      <section class="view" id="companies" data-view="companies" aria-labelledby="companiesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Companies</p>
+            <h2 id="companiesTitle">Target account tracker</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-company-modal">Add Company</button>
+        </div>
+        <div class="company-grid" id="companyGrid"></div>
+      </section>
+
+      <!-- Interview scheduler and preparation timeline. -->
+      <section class="view" id="interviews" data-view="interviews" aria-labelledby="interviewsTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Interviews</p>
+            <h2 id="interviewsTitle">Schedule and preparation</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-interview-modal">Schedule Interview</button>
+        </div>
+        <div class="timeline-list" id="interviewTimeline"></div>
+      </section>
+
+      <!-- Month calendar combining interviews and follow-up deadlines. -->
+      <section class="view" id="calendar" data-view="calendar" aria-labelledby="calendarTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Calendar</p>
+            <h2 id="calendarTitle">Interview and deadline calendar</h2>
+          </div>
+          <div class="inline-actions">
+            <button class="icon-button" type="button" id="prevMonthBtn" aria-label="Previous month">&lt;</button>
+            <strong id="calendarMonthLabel"></strong>
+            <button class="icon-button" type="button" id="nextMonthBtn" aria-label="Next month">&gt;</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </section>
+
+      <!-- Chart.js analytics dashboard. -->
+      <section class="view" id="analytics" data-view="analytics" aria-labelledby="analyticsTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Analytics</p>
+            <h2 id="analyticsTitle">Performance intelligence</h2>
+          </div>
+          <button class="button button-muted" type="button" id="refreshChartsBtn">Refresh Charts</button>
+        </div>
+        <div class="analytics-grid">
+          <article class="panel chart-panel">
+            <div class="panel-header">
+              <h3>Applications by status</h3>
+            </div>
+            <canvas id="statusChart" height="260"></canvas>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-header">
+              <h3>Monthly application velocity</h3>
+            </div>
+            <canvas id="velocityChart" height="260"></canvas>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-header">
+              <h3>Interview conversion</h3>
+            </div>
+            <canvas id="conversionChart" height="260"></canvas>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-header">
+              <h3>Skill readiness</h3>
+            </div>
+            <canvas id="skillsChart" height="260"></canvas>
+          </article>
+        </div>
+      </section>
+
+      <!-- Resume version manager. -->
+      <section class="view" id="resumes" data-view="resumes" aria-labelledby="resumesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Resumes</p>
+            <h2 id="resumesTitle">Version manager</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-resume-modal">Add Version</button>
+        </div>
+        <div class="resume-grid" id="resumeGrid"></div>
+      </section>
+
+      <!-- Skill gap tracker with progress bars. -->
+      <section class="view" id="skills" data-view="skills" aria-labelledby="skillsTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Skill Gaps</p>
+            <h2 id="skillsTitle">Readiness tracker</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-skill-modal">Add Skill</button>
+        </div>
+        <div class="skill-list" id="skillList"></div>
+      </section>
+
+      <!-- Interview notes and decision log. -->
+      <section class="view" id="notes" data-view="notes" aria-labelledby="notesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Notes</p>
+            <h2 id="notesTitle">Interview notes and decision log</h2>
+          </div>
+          <button class="button button-primary" type="button" data-action="open-note-modal">Add Note</button>
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Shared modal used by every CRUD workflow. -->
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" id="modalEyebrow">Manage</p>
+          <h2 id="modalTitle">Modal</h2>
+        </div>
+        <button class="icon-button" type="button" data-action="close-modal" aria-label="Close modal">x</button>
+      </div>
+      <form id="modalForm" class="modal-form"></form>
+    </div>
+  </div>
+
+  <!-- Accessible toast notification region. -->
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-label="Notifications"></div>
+</body>
+</html>
