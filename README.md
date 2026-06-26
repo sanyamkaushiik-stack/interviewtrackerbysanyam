@@ -1,5 +1,4 @@
-# Interview Tracker
-
+# Career Tracker
 A responsive web application to help candidates organize and track their interview schedules, preparation progress, and outcomes. This project demonstrates practical skills in frontend development, responsive design, and deployment workflows.
 
 ## 🚀 Features
@@ -9,7 +8,7 @@ A responsive web application to help candidates organize and track their intervi
 - Deployed on **Netlify** for instant live access
 
 ## 🔗 Live Demo
-👉 [interviewtrackerbysanyam.netlify.app](https://interviewtrackerbysanyam.netlify.app)
+👉 [interviewtrackerbysanyam.netlify.app](https://careertrackerbysanyam.netlify.app)
 
 ## 🛠️ Tech Stack
 - **Frontend:** HTML5, CSS3, JavaScript  
