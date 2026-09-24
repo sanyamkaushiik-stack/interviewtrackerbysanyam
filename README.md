@@ -1,6 +1,6 @@
 # Interview Tracker by Sanyam 🚀
 
-Live: careertrackerbysanyam.netlify.app  | Built by Sanyam Kaushik
+Live: https://careertrackerbysanyam.netlify.app Built by Sanyam Kaushik
 
 A clean, fast interview management tool for job seekers to track applications, interview stages, and offers — built because Excel sheets are painful.
 
