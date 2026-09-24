@@ -1,25 +1,30 @@
-# Career Tracker
-A responsive web application to help candidates organize and track their interview schedules, preparation progress, and outcomes. This project demonstrates practical skills in frontend development, responsive design, and deployment workflows.
+# Interview Tracker by Sanyam 🚀
 
-## 🚀 Features
-- Add, edit, and manage interview entries
-- Track preparation status and results
-- Clean, responsive UI built with **HTML, CSS, and JavaScript**
-- Deployed on **Netlify** for instant live access
+Live: [Your Netlify Link Here] | Built by Sanyam Kaushik
 
-## 🔗 Live Demo
-👉 [interviewtrackerbysanyam.netlify.app](https://careertrackerbysanyam.netlify.app)
+A clean, fast interview management tool for job seekers to track applications, interview stages, and offers — built because Excel sheets are painful.
 
-## 🛠️ Tech Stack
-- **Frontend:** HTML5, CSS3, JavaScript  
-- **Deployment:** Netlify  
+### 🔥 Why I Built This
+I was tracking 30+ applications manually and missing follow-ups. So I built a tracker that does it better.
 
-## 📌 Future Enhancements
-- Integration with Google Calendar for automated scheduling  
-- Export interview data to CSV/Excel for offline tracking  
-- User authentication for personalized dashboards  
+### ✨ Features
+- Add company, role, status (Applied, Interview, Offer, Rejected)
+- Timeline view of interview stages
+- Filter by status + search
+- Local storage so data never lost
+- Clean, mobile-first UI
 
-## 📂 How to Run Locally
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/interview-tracker.git
+### 🛠️ Tech Stack
+- HTML5, CSS3 (Flexbox, Glass-morphism)
+- JavaScript (Vanilla JS, LocalStorage API)
+- Deployed on Netlify with GitHub CI
+### 🚀 How to Run
+1. Clone repo
+2. Open `index.html`
+3. No setup needed
+
+### 🔮 Next Update
+- Export to CSV
+- Reminder notifications
+
+Built with ❤️ by Sanyam Kaushik | BTech (cse)
